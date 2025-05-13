@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WhatsApp Scheduler</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 15px;
+      width: 300px;
+      background-color: #f5f5f5;
+    }
+    
+    h3 {
+      text-align: center;
+      color: #128C7E; /* WhatsApp green */
+      margin-top: 0;
+    }
+    
+    .input-group {
+      margin-bottom: 12px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    
+    textarea {
+      height: 80px;
+      resize: vertical;
+    }
+    
+    button {
+      padding: 10px;
+      width: 100%;
+      background-color: #128C7E; /* WhatsApp green */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+    }
+    
+    button:hover {
+      background-color: #075E54; /* Darker WhatsApp green */
+    }
+    
+    .info {
+      font-size: 11px;
+      color: #666;
+      margin-top: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h3>WhatsApp Scheduler</h3>
+  
+  <div class="input-group">
+    <label for="contact">Contact Name:</label>
+    <input type="text" id="contact" placeholder="Exact name as in WhatsApp" />
+  </div>
+  
+  <div class="input-group">
+    <label for="message">Message:</label>
+    <textarea id="message" placeholder="Type your message here"></textarea>
+  </div>
+  
+  <div class="input-group">
+    <label for="time">Schedule Time:</label>
+    <input type="datetime-local" id="time" />
+  </div>
+  
+  <button id="scheduleBtn">Schedule Message</button>
+  
+  <div class="info">
+    Note: Keep WhatsApp Web open. The extension will try to send the message at the scheduled time.
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "WhatsApp Message Scheduler",
+  "version": "1.0",
+  "description": "Schedule WhatsApp messages via Web",
+  "permissions": ["alarms", "storage", "scripting", "tabs"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "https://web.whatsapp.com/*"
+  ]
+}
