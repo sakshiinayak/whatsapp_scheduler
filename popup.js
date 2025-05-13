@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Set default time to current time + 1 minute
+  
   const now = new Date();
   now.setMinutes(now.getMinutes() + 1);
   
-  // Format date and time for datetime-local input
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const defaultTime = `${year}-${month}-${day}T${hours}:${minutes}`;
   document.getElementById('time').value = defaultTime;
   
-  // Load any previously saved contact
   chrome.storage.local.get(["contact"], ({ contact }) => {
     if (contact) {
       document.getElementById('contact').value = contact;
@@ -26,7 +24,6 @@ document.getElementById('scheduleBtn').addEventListener('click', () => {
   const message = document.getElementById('message').value.trim();
   const time = new Date(document.getElementById('time').value);
 
-  // Validation
   if (!contact) {
     alert("Please enter a contact name.");
     return;
@@ -44,7 +41,7 @@ document.getElementById('scheduleBtn').addEventListener('click', () => {
 
   const now = Date.now();
   const delayMs = time.getTime() - now;
-  const minimumDelayMs = 30 * 1000; // 30 seconds
+  const minimumDelayMs = 30 * 1000; 
 
   if (delayMs < minimumDelayMs) {
     alert("Please schedule at least 30 seconds in the future.");
@@ -56,7 +53,6 @@ document.getElementById('scheduleBtn').addEventListener('click', () => {
   chrome.storage.local.set({ contact, message }, () => {
     chrome.alarms.create("sendMsg", { delayInMinutes: delayInMinutes });
     
-    // Format time for display
     const timeString = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const dateString = time.toLocaleDateString();
     
