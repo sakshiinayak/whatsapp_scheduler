@@ -4,7 +4,6 @@ chrome.storage.local.get(["contact", "message"], ({ contact, message }) => {
   function findChatAndSend() {
     console.log("Searching for chat: " + contact);
 
-    // More robust chat search - search for all spans inside contact list
     const chats = document.querySelectorAll("span[title], div[title]");
     let chat = null;
 
@@ -25,23 +24,16 @@ chrome.storage.local.get(["contact", "message"], ({ contact, message }) => {
     console.log("Found chat: " + chat.title);
     chat.click();
 
-    // Wait for chat to open
     setTimeout(() => {
-      // DIRECT PROGRAMMATIC SEND APPROACH
-      // This uses WhatsApp Web's internal Window.Store to send messages
-      // This bypasses UI completely and is much more reliable
       
       console.log("Attempting to send message via WhatsApp Web's internal API");
       
       try {
-        // Get WhatsApp's internal modules to access the Store
         const getElementByXpath = function(xpath) {
           return document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         };
         
-        // Function to find WhatsApp's internal modules through a known UI element
         function getWhatsAppModules() {
-          // Find any active chat or UI element that would have the modules attached
           const element = getElementByXpath("//*[@id='app']") || 
                          document.querySelector('#app') || 
                          document.querySelector('div[data-asset-chat-background]') ||
@@ -52,11 +44,9 @@ chrome.storage.local.get(["contact", "message"], ({ contact, message }) => {
             return null;
           }
           
-          // Find webpack modules through the element's React props
           for (const key in element) {
             if (key.startsWith("__reactProps$") && element[key] && element[key].children) {
               console.log("Found React props");
-              // Navigate through React component tree to find modules
               return traverseReactTree(element);
             }
           }
@@ -64,19 +54,16 @@ chrome.storage.local.get(["contact", "message"], ({ contact, message }) => {
           return null;
         }
         
-        // Function to traverse React component tree looking for Store modules
         function traverseReactTree(element) {
-          // Helper function to search objects recursively
+
           function searchForStore(obj, depth = 0) {
-            if (depth > 10) return null; // Prevent infinite recursion
+            if (depth > 10) return null; 
             
             if (!obj || typeof obj !== 'object') return null;
-            
-            // Look for modules/stores with send message capability
+
             if (obj.Chat && obj.Msg) return obj;
             if (obj.sendMessage || obj.sendTextMsgToChat) return obj;
             
-            // Continue search in object properties
             for (const key in obj) {
               if (key === "sendMessage" || key === "sendTextMsgToChat") {
                 return obj;
@@ -91,7 +78,6 @@ chrome.storage.local.get(["contact", "message"], ({ contact, message }) => {
             return null;
           }
           
-          // Start search from the element
           for (const key in element) {
             if (key.startsWith("__reactProps$") || key.startsWith("__reactFiber$")) {
               const result = searchForStore(element[key]);
@@ -107,7 +93,6 @@ chrome.storage.local.get(["contact", "message"], ({ contact, message }) => {
         if (modules) {
           console.log("Found WhatsApp modules, attempting to send message");
           
-          // Try multiple approaches to find the correct method to send messages
           if (modules.sendMessage) {
             console.log("Using sendMessage function");
             modules.sendMessage(message);
